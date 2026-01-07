@@ -1,0 +1,250 @@
+body {
+    margin: 0;
+    font-family: 'Open Sans', sans-serif;
+    color: #333;
+    background-color: #E0F2F7; /* Baby Blue lembut */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow: hidden;
+    position: relative;
+    perspective: 1000px; /* Untuk efek 3D amplop */
+}
+
+/* --- Latar Belakang Bunga --- */
+#flower-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.flower {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    background-color: #ADD8E6; /* Light Blue */
+    border-radius: 50%;
+    opacity: 0.8;
+    animation: fall linear infinite;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* --- Konten Surat --- */
+#letter-content {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    max-width: 600px;
+    width: 90%;
+    position: absolute; /* Posisikan absolut agar bisa di atas amplop */
+    z-index: 50; /* Pastikan di atas amplop */
+    opacity: 0; /* Awalnya tersembunyi */
+    transform: scale(0.8); /* Awalnya sedikit kecil */
+    transition: all 1s ease-out; /* Transisi untuk munculnya surat */
+    pointer-events: none; /* Jangan bisa diklik saat tersembunyi */
+}
+
+#letter-content.show {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: all; /* Bisa diklik saat muncul */
+}
+
+h1 {
+    color: #4682B4;
+    font-size: 2.5em;
+    margin-bottom: 20px;
+}
+
+p {
+    font-size: 1.2em;
+    line-height: 1.6;
+    margin-bottom: 25px;
+    color: #555;
+}
+
+.arabic-text {
+    direction: rtl;
+    font-family: 'Times New Roman', serif;
+    font-weight: bold;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    color: #4682B4;
+}
+
+.signature {
+    margin-top: 40px;
+    font-style: italic;
+    color: #777;
+    opacity: 0; /* Awalnya tersembunyi */
+    transform: translateY(20px);
+    transition: all 0.8s ease-out 0.5s; /* Transisi untuk signature */
+}
+
+.signature p:last-child {
+    font-weight: 600;
+    font-size: 1.1em;
+}
+
+.signature.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* --- Amplop --- */
+#envelope-wrapper {
+    position: relative;
+    width: 300px; /* Ukuran amplop */
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 20; /* Di atas background, di bawah surat */
+    cursor: pointer;
+    animation: envelope-float 3s ease-in-out infinite alternate; /* Animasi mengambang */
+}
+
+#envelope {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-color: #B0E0E6; /* Powder Blue */
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.5s ease-out; /* Transisi untuk efek buka amplop */
+}
+
+#envelope.open {
+    transform: translateY(-50px) rotateX(20deg); /* Amplop bergeser ke atas dan sedikit miring */
+}
+
+.top, .bottom, .left, .right, .flap {
+    position: absolute;
+    background-color: #B0E0E6; /* Sama dengan warna amplop */
+}
+
+.top {
+    width: 100%;
+    height: 50%;
+    top: 0;
+    left: 0;
+    clip-path: polygon(0 0, 100% 0, 50% 100%); /* Segitiga terbalik */
+    background-color: #9ac2cc; /* Warna lebih gelap untuk kontras */
+}
+
+.bottom {
+    width: 100%;
+    height: 50%;
+    bottom: 0;
+    left: 0;
+    clip-path: polygon(0 100%, 100% 100%, 50% 0); /* Segitiga normal */
+}
+
+.left {
+    width: 50%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+
+.right {
+    width: 50%;
+    height: 100%;
+    top: 0;
+    right: 0;
+    clip-path: polygon(100% 0, 0 50%, 100% 100%);
+}
+
+.flap {
+    width: 100%;
+    height: 50%;
+    top: 0;
+    left: 0;
+    background-color: #7DAFAF; /* Warna lebih gelap untuk flap */
+    transform-origin: top; /* Berputar dari atas */
+    transition: transform 0.5s ease-out;
+    z-index: 30; /* Di atas bagian lain amplop */
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
+
+#envelope.open .flap {
+    transform: rotateX(180deg); /* Buka flap ke belakang */
+    opacity: 0; /* Sembunyikan flap saat terbuka penuh */
+}
+
+.envelope-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #4682B4; /* Warna teks biru yang serasi */
+    font-weight: bold;
+    font-size: 1.1em;
+    z-index: 35;
+    pointer-events: none; /* Agar klik tetap tembus ke amplop */
+    transition: opacity 0.3s ease-out;
+}
+
+#envelope.open .envelope-text {
+    opacity: 0; /* Sembunyikan teks saat amplop terbuka */
+}
+
+.stamp {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background-color: #FFFAF0; /* Floral White */
+    top: 10px;
+    right: 10px;
+    border-radius: 50%;
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+    z-index: 30;
+}
+
+/* Animasi Amplop Mengambang */
+@keyframes envelope-float {
+    0% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(2deg); }
+    100% { transform: translateY(0) rotate(0deg); }
+}
+
+/* Penyesuaian untuk HP */
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.6em; /* Perkecil judul di HP */
+    }
+
+    p {
+        font-size: 1em; /* Perkecil teks pesan agar tidak terlalu panjang ke bawah */
+        line-height: 1.4;
+    }
+
+    #envelope-wrapper {
+        width: 260px; /* Perkecil amplop agar pas di layar HP */
+        height: 170px;
+    }
+
+    #letter-content {
+        padding: 25px 15px; /* Kurangi padding agar teks lebih luas */
+        width: 85%;
+    }
+
+    .arabic-text {
+        font-size: 1.4rem; /* Perkecil tulisan Arab sedikit */
+    }
+}
